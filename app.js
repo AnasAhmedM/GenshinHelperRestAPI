@@ -16,11 +16,11 @@ const app = express();
 app.set('views', path.join(__dirname, "app_server", 'views'));
 app.set('view engine', 'jade');
 
-const corsOptions = {
-  origin: '*',
-  optionsSuccessStatus: 200,
-}
-app.use(cors(corsOptions));
+// const corsOptions = {
+//   origin: '*',
+//   optionsSuccessStatus: 200,
+// }
+// app.use(cors(corsOptions));
 
 app.use(logger('dev'));
 app.use(express.json());
