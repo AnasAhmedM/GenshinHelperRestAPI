@@ -88,16 +88,29 @@ describe("Weapon Endpoint Test", ()=>{
 })
 
 describe("Player Account Tests", ()=>{
-    it("Testing Getting Player Account", done => {
-        const testUsername = "ammarrmalik185";
-        testObject.GetPlayer({
+    describe("Testing Getting Player Account", () => {
+        it("Test 1 (valid data)", done => {
+            const testUsername = "ammarrmalik185";
+            testObject.GetPlayer({
                 params:{username:testUsername}
-        }, { json: data => {
-                expect(data.username).toBe("ammarrmalik185");
-                done();
-            }
+            }, { json: data => {
+                    expect(data.username).toBe("ammarrmalik185");
+                    done();
+                }
+            })
+        })
+        it("Test 1 (invalid data)", done => {
+            const testUsername = "randomUsername";
+            testObject.GetPlayer({
+                params:{username:testUsername}
+            }, { json: data => {
+                    expect(data).toBeNull();
+                    done();
+                }
+            })
         })
     })
+
     describe("Creating a player Account", ()=> {
         it("Test 1 (valid data)", done => {
             testObject.RegisterPlayer({
