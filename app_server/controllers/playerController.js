@@ -6,12 +6,12 @@ const mongoose = require("mongoose");
 
 //Player
 module.exports.RegisterPlayer = function (req, res) {
-    new Player(req.body).save()
+    new Player(req.body).save().catch(e=>{})
     res.json("Resgistered!")
 }
 
 module.exports.GetPlayer = function (req, res) {
-    Character.findOne({username: req.params.username}).exec((err, data) => {
+    Player.findOne({username: req.params.username}).exec((err, data) => {
         if (err) throw err
         res.json(data)
     })

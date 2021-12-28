@@ -1,88 +1,129 @@
-const Player = require('../app_server/models/playerModel')
-const Character = require('../app_server/models/characterModel')
-const Artifact = require('../app_server/models/artifactModel')
-const Weapon = require('../app_server/models/weaponModel')
-const mongoose = require("mongoose");
+const testObject = require("../app_server/controllers/playerController")
 
-//Player
-const RegisterPlayer = function (req, res) {
-    new Player(req.body).save()
-    res.json("Resgistered!")
-}
-
-const GetPlayer = function (req, res) {
-    Character.findOne({username: req.params.username}).exec((err, data) => {
-        if (err) throw err
-        res.json(data)
+describe("Character Endpoint Test", () => {
+    it("Testing Getting All Characters", done => {
+        testObject.GetAllCharacters({}, {
+            json: data => {
+                expect(data).not.toBeNull();
+                done();
+            }
+        })
     })
-}
-
-const UpdatePlayer = function (req, res) {
-    Player.findOne({username: req.params.username}, req.body).exec((err, data) => {
-        if (err) throw err
-        res.json(data)
+    describe("Testing Getting Single Character", () => {
+        it("Test 1 (valid data)", done => {
+            testObject.GetCharacter({
+                params: {id: "albedo"}
+            }, { json: data => {
+                expect(data.id).toBe("albedo");
+                done();
+            }})
+        })
+        it("Test 2 (id does not exist)", done => {
+            testObject.GetCharacter({
+                params: {id: "randomId"}
+            }, { json: data => {
+                    expect(data).toBeNull();
+                    done();
+                }})
+        })
     })
-}
+})
 
-
-//Characters
-const GetAllCharacters = function (req, res) {
-    Character.find({}).exec((err, data) => {
-        if (err) throw err
-        res.json(data)
+describe("Artifact Endpoint Test", () => {
+    it("Testing Getting All Artifacts", done => {
+        testObject.GetAllArtifacts({}, {
+            json: data => {
+                expect(data).not.toBeNull();
+                done();
+            }
+        })
     })
-}
-
-const GetCharacter = function (req, res) {
-    Character.findOne({id: req.params.id}).exec((err, data) => {
-        if (err) throw err
-        res.json(data)
+    describe("Testing Getting Single Artifact", () => {
+        it("Test 1 (valid data)", done => {
+            testObject.GetArtifact({
+                params: {id: 11}
+            }, { json: data => {
+                    expect(data.id).toBe(11);
+                    done();
+                }})
+        })
+        it("Test 2 (id does not exist)", done => {
+            testObject.GetArtifact({
+                params: {id: -3}
+            }, { json: data => {
+                    expect(data).toBeNull();
+                    done();
+                }})
+        })
     })
-}
+})
 
-//Weapons
-const GetAllWeapons = function (req, res) {
-    Weapon.find({}).exec((err, data) => {
-        if (err) throw err
-        res.json(data)
+describe("Weapon Endpoint Test", ()=>{
+    it("Testing Getting All Weapons", done => {
+        testObject.GetAllWeapons({}, {
+            json: data => {
+                expect(data).not.toBeNull();
+                done();
+            }
+        })
     })
-}
-
-const GetWeapon = function (req, res) {
-    Weapon.findOne({id: req.params.id}).exec((err, data) => {
-        if (err) throw err
-        res.json(data)
+    describe("Testing Getting Single Weapon", () => {
+        it("Test 1 (valid data)", done => {
+            testObject.GetWeapon({
+                params: {id: "akuoumaru"}
+            }, { json: data => {
+                    expect(data.id).toBe("akuoumaru");
+                    done();
+                }})
+        })
+        it("Test 2 (id does not exist)", done => {
+            testObject.GetWeapon({
+                params: {id: "randomId"}
+            }, { json: data => {
+                    expect(data).toBeNull();
+                    done();
+                }})
+        })
     })
-}
+})
 
-const DeleteWeapon = function (req, res) {
-    Weapon.deleteOne({id: req.params.id}).exec((err, data) => {
-        if (err) throw err
-        res.json(data)
+describe("Player Account Tests", ()=>{
+    it("Testing Getting Player Account", done => {
+        const testUsername = "ammarrmalik185";
+        testObject.GetPlayer({
+                params:{username:testUsername}
+        }, { json: data => {
+                expect(data.username).toBe("ammarrmalik185");
+                done();
+            }
+        })
     })
-}
-
-//Artifacts
-const GetAllArtifacts = function (req, res) {
-    Artifact.find({}).exec((err, data) => {
-        if (err) throw err
-        res.json(data)
-    })
-}
-
-const GetArtifact = function (req, res) {
-    Artifact.findOne({id: req.params.id}).exec((err, data) => {
-        if (err) throw err
-        res.json(data)
-    })
-}
-
-test("Testing Getting Characters", done => {
-    GetAllCharacters({}, {
-        json: data => {
-            console.log(data)
-            expect(data).not.toBeNull();
-            done();
-        }
+    describe("Creating a player Account", ()=> {
+        it("Test 1 (valid data)", done => {
+            testObject.RegisterPlayer({
+                body: {
+                    name: "Ammar", username: "ammarrmalik185", password: "12345678", email:"ammarrmalik185@hotmail.com"
+                }
+            }, { json: data => {
+                    expect(data).toBe("Resgistered!");
+                    done();
+                }
+            })
+        })
+        it("Test 2 (invalid data)", done => {
+            testObject.RegisterPlayer({
+                body: {
+                    name: "Ammar",
+                    teams: "ammarrmalik185",
+                    password: "12345678",
+                    email: "ammarrmalik185@hotmail.com"
+                }
+            }, {
+                json: data => {
+                    expect(data).not.toBe("Resgistered!");
+                    done();
+                }
+            })
+        })
     })
 })
