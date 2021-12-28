@@ -19,12 +19,5 @@ router.get('/weapon/:id', playerController.GetWeapon)
 router.get('/artifacts', playerController.GetAllArtifacts)
 router.get('/artifact/:id', playerController.GetArtifact)
 
-/*
-router.post('/register', publisherController.register)
-router.get('/blogs/:publisherID', publisherController.blogsGet)
-router.get('/blog/:blogID', publisherController.blogGet)
-router.put('/blog/:publisherID/:blogID', publisherController.blogUpdate)
-router.delete('/blog/:publisherID/:blogID', publisherController.blogDelete)
-*/
 
 module.exports = router
